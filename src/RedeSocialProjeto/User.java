@@ -19,6 +19,14 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
     
+	public User(int id, String name2, String email2, String password2, String phoneNumber2) {
+		this.id = id;
+		this.name = name2;
+		this.email = email2;
+		this.password = password2;
+		this.phoneNumber = phoneNumber2;
+	}
+
 	public User(String name2, String email2, String password2, String phoneNumber2) {
 		this.name = name2;
 		this.email = email2;

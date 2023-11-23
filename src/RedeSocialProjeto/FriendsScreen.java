@@ -40,7 +40,12 @@ public class FriendsScreen extends JFrame {
                 preparedStatement.setString(1, Authentication.usuarioAtual.getName());
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
-                        users.add(new User(resultSet));
+                        int id = resultSet.getInt("id");
+                        String name = resultSet.getString("name");
+                        String email = resultSet.getString("email");
+                        String password = resultSet.getString("password");
+                        String phoneNumber = resultSet.getString("phone_number");
+                        users.add(new User(id, name, email, password, phoneNumber));
                     }
                 }
             }
