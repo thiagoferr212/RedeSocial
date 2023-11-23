@@ -60,7 +60,7 @@ public class FriendsScreen extends JFrame {
         List<User> friends = new ArrayList<>();
         try (Connection connection = DatabaseConnector.connect()) {
             int userId = getUserId(); // Replace with a real function to get the user ID
-            String query = "SELECT u.id, u.name FROM friends f " +
+            String query = "SELECT u.* FROM friends f " +
                            "JOIN users u ON f.id_amigo = u.id " +
                            "WHERE f.user_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
