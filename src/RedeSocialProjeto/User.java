@@ -61,8 +61,10 @@ public class User {
         } catch (SQLException e) {
           if (e.getMessage().contains("duplicate key")) {
 						JOptionPane.showMessageDialog(null, "O Usuário já está cadastrado!");
+						return;
 					}
         }
+				JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
     }
 
 

@@ -101,7 +101,6 @@ public class RegistrationScreen extends JFrame {
         } else if(password.equals(confirmPassword)) {
                 User user = new User(name, email, password, phoneNumber);
                 user.saveToDatabase();
-                JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
                 dispose(); // Fecha a tela de cadastro
             } else {
                 JOptionPane.showMessageDialog(null, "As senhas não coincidem. Tente novamente.");
