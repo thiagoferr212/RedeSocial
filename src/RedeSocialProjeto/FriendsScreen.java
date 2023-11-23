@@ -129,7 +129,7 @@ public class FriendsScreen extends JFrame {
         for (User user : allUsers) {
             String name = user.getName();
             if (!name.isBlank()) {
-                usersArray[i] = name;
+                usersArray[i++] = name;
             }
         }
 
@@ -233,7 +233,7 @@ public class FriendsScreen extends JFrame {
         int i = 0;
         String[] friendsArray = new String[friendsList.size()];
         for (User user : friendsList) {
-            friendsArray[i] = user.getName();
+            friendsArray[i++] = user.getName();
         }
 
         String selectedFriend = (String) JOptionPane.showInputDialog(
