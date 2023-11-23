@@ -18,7 +18,7 @@ public class Friend {
 
 		public void saveToDatabase() {
 				try (Connection connection = DatabaseConnector.connect()) {
-						String query = "INSERT INTO friends (user_id, friend_id) VALUES (?, ?);";
+						String query = "INSERT INTO friends (user_id, id_amigo) VALUES (?, ?);";
 						try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 								preparedStatement.setInt(1, idUser);
 								preparedStatement.setInt(2, idFriend);
