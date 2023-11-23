@@ -33,7 +33,7 @@ public class User {
 			this.name = resultSet.getString("name");
 			this.email = resultSet.getString("email");
 			this.password = resultSet.getString("password");
-			this.phoneNumber = resultSet.getString("phoneNumber");
+			this.phoneNumber = resultSet.getString("phone_number");
 		}
 	}
 

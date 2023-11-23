@@ -35,7 +35,7 @@ public class Friend {
 		public void deleteToDatabase() {
 			try (Connection connection = DatabaseConnector.connect()) {
 					String query = "DELETE FROM friends " +
-					"WHERE user_id = ? AND friend_id = (SELECT id FROM users WHERE name = ?)";
+					"WHERE user_id = ? AND id_amigo = (SELECT id FROM users WHERE name = ?)";
 				try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
 					preparedStatement.setString(1, idUser);

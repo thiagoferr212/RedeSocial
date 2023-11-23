@@ -51,12 +51,12 @@ public class FriendsScreen extends JFrame {
         // Simulação: obter amigos do usuário atual do banco de dados
         List<User> friends = new ArrayList<>();
         try (Connection connection = DatabaseConnector.connect()) {
-            String userId = getUserId(); // Replace with a real function to get the user ID
+            int userId = Integer.valueOf(getUserId()); // Replace with a real function to get the user ID
             String query = "SELECT u.id, u.name FROM friends f " +
-                           "JOIN users u ON f.friend_id = u.id " +
+                           "JOIN users u ON f.id_amigo = u.id " +
                            "WHERE f.user_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, userId);
+                preparedStatement.setInt(1, userId);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
                         friends.add(new User(resultSet));
@@ -181,8 +181,8 @@ public class FriendsScreen extends JFrame {
         
         try (Connection connection = DatabaseConnector.connect()) {
             // Simulação: Supondo que você tenha uma tabela 'users' com colunas 'id' e 'name', 
-            // e uma tabela 'friends' com colunas 'user_id' e 'friend_id' (ou 'friend_name')
-            String query = "SELECT u.Id, u.name FROM users u INNER JOIN friends f ON u.id = f.friend_id WHERE f.user_id = ?";
+            // e uma tabela 'friends' com colunas 'user_id' e 'id_amigo' (ou 'friend_name')
+            String query = "SELECT u.Id, u.name FROM users u INNER JOIN friends f ON u.id = f.id_amigo WHERE f.user_id = ?";
             
             String userId = getUserId();
             

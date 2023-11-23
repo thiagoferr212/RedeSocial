@@ -17,7 +17,7 @@ public class ChatScreen extends JFrame {
     private JTextField messageField;
     private JComboBox<String> friendComboBox;
 
-    private List<Friend> friendsList;  // Lista de objetos Friend
+    private List<Friend> friendsList;  // Lista de objetos amigos
 
     public ChatScreen() {
         setTitle("Chat");
@@ -38,7 +38,7 @@ public class ChatScreen extends JFrame {
 
         try (Connection connection = DatabaseConnector.connect()) {
             // Consulta SQL para obter a lista de amigos do banco de dados
-            String query = "SELECT f.friend_name FROM friends f WHERE f.user_id = ?";
+            String query = "SELECT f.id_amigo FROM friends f WHERE f.user_id = ?";
             
             // Supondo que você tenha uma função real que obtenha o ID do usuário atual
             int userId = getUserId();
@@ -118,7 +118,7 @@ public class ChatScreen extends JFrame {
                 chatArea.append(message);
 
                 // Limpa o campo de texto
-                messageField.setText(message);
+                messageField.setText("");
             } else {
                 JOptionPane.showMessageDialog(null, "Selecione um amigo para enviar a mensagem.");
             }
