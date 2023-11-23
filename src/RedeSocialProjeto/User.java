@@ -58,7 +58,9 @@ public class User {
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+          if (e.getMessage().contains("duplicate key")) {
+						JOptionPane.showMessageDialog(null, "O Usuário já está cadastrado!");
+					}
         }
     }
 
