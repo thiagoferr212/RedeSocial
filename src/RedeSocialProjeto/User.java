@@ -26,11 +26,13 @@ public class User {
 	}
 
 	public User(ResultSet resultSet) throws SQLException {
-		this.id = resultSet.getString("id");
-		this.name = resultSet.getString("name");
-		this.email = resultSet.getString("email");
-		this.password = resultSet.getString("password");
-		this.phoneNumber = resultSet.getString("phoneNumber");
+		while (resultSet.next()) {
+			this.id = String.valueOf(resultSet.getString("id"));
+			this.name = resultSet.getString("name");
+			this.email = resultSet.getString("email");
+			this.password = resultSet.getString("password");
+			this.phoneNumber = resultSet.getString("phoneNumber");
+		}
 	}
 
 	// Método para salvar o usuário no banco de dados

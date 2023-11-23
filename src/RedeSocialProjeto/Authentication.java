@@ -17,7 +17,7 @@ public class Authentication {
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     usuarioAtual = new User(resultSet);
-                    return resultSet.next();
+                    return true;
                 }
             }
         } catch (SQLException e) {
