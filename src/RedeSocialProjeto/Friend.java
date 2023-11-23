@@ -32,6 +32,23 @@ public class Friend {
 				}
 		}
 
+		public void deleteToDatabase() {
+			try (Connection connection = DatabaseConnector.connect()) {
+					String query = "DELETE FROM friends " +
+					"WHERE user_id = ? AND friend_id = (SELECT id FROM users WHERE name = ?)";
+				try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+					preparedStatement.setString(1, idUser);
+					preparedStatement.setString(2, idFriend);
+					preparedStatement.setString(3, idFriend);
+					preparedStatement.setString(4, idUser);
+					preparedStatement.executeUpdate();
+				} 
+			} catch (SQLException e) {
+					e.printStackTrace();
+			}
+		}
+
 		public String getFriendName() {
 			// TODO Auto-generated method stub
 			return null;

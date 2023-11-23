@@ -105,7 +105,12 @@ public class FriendsScreen extends JFrame {
 
     private void includeFriend() {
         // Simulação: exibir uma lista de usuários e permitir a inclusão de amigos
-        String[] usersArray = allUsers.toArray(new String[0]);
+        int i = 0;
+        String[] usersArray = new String[allUsers.size()];
+        for (User user : allUsers) {
+            usersArray[i] = user.getName();
+        }
+
         String selectedUser = (String) JOptionPane.showInputDialog(
                 null,
                 "Escolha um usuário para adicionar como amigo:",
@@ -115,37 +120,37 @@ public class FriendsScreen extends JFrame {
                 usersArray,
                 usersArray[0]
         );
-
-        if (selectedUser != null && !friendsList.contains(selectedUser)) {
-            friendsList.add(new User());
-            updateFriendsList(selectedUser, true); // Inclui amigo no banco de dados
+        
+        User userFriend = new User();
+        for (User user : allUsers) {
+            if (user.getName() == selectedUser) {
+                userFriend = user;               
+            }
+        }
+        
+        if (selectedUser != null && !friendsList.contains(userFriend)) {
+            friendsList.add(userFriend);
+            updateFriendsList(userFriend, true); // Inclui amigo no banco de dados
             JOptionPane.showMessageDialog(null, selectedUser + " foi adicionado como amigo.");
-        } else if (friendsList.contains(new User())) {
+        } else if (friendsList.contains(userFriend)) {
             JOptionPane.showMessageDialog(null, selectedUser + " já é seu amigo.");
         }
     }
 
-    private void updateFriendsList(String friendName, boolean addFriend) {
+    private void updateFriendsList(User userFriend, boolean addFriend) {
         // Atualiza a lista de amigos no banco de dados
         try (Connection connection = DatabaseConnector.connect()) {
             String userId = getUserId();
             String query;
 
+            Friend amigo = new Friend(userId, userFriend.getId());
+
             if (addFriend) {
-                query = "INSERT INTO friends (user_id, friend_id) " +
-                        "SELECT ?, id FROM users WHERE name = ?";
+                amigo.saveToDatabase();
             } else {
-                query = "DELETE FROM friends " +
-                        "WHERE user_id = ? AND friend_id = (SELECT id FROM users WHERE name = ?)";
+                amigo.deleteToDatabase();
             }
 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                // Simulação: Supondo que você tenha uma tabela 'friends' com colunas 'user_id' e 'friend_name'
-                preparedStatement.setString(1, userId);
-                String selectedUser = null;
-				preparedStatement.setString(2, selectedUser);
-                preparedStatement.executeUpdate();
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
