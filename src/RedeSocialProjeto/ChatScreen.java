@@ -40,8 +40,9 @@ public class ChatScreen extends JFrame {
 
         try (Connection connection = DatabaseConnector.connect()) {
             // Consulta SQL para obter a lista de amigos do banco de dados
-            String query = "SELECT f.id_amigo FROM friends f WHERE f.user_id = ?";
-            
+            String query = "SELECT u.* FROM users u " +
+                    "INNER JOIN friends f ON u.id = f.id_amigo " +
+                    "WHERE f.user_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, getUserId());
 
