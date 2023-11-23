@@ -98,8 +98,7 @@ public class RegistrationScreen extends JFrame {
         
         if (isEmpty(name) || isEmpty(email) || isEmpty(password) || isEmpty(confirmPassword) || isEmpty(phoneNumber)) {
             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
-        } else {
-            if (password.equals(confirmPassword)) {
+        } else if(password.equals(confirmPassword)) {
                 User user = new User(name, email, password, phoneNumber);
                 user.saveToDatabase();
                 JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso!");
@@ -108,7 +107,6 @@ public class RegistrationScreen extends JFrame {
                 JOptionPane.showMessageDialog(null, "As senhas não coincidem. Tente novamente.");
             }
         }
-    }
     private boolean isEmpty(String text) {
         return text.trim().isEmpty();
     }
