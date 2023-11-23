@@ -13,6 +13,9 @@ public class MainMenuScreen extends JFrame {
         JPanel panel = new JPanel();
         add(panel);
         placeComponents(panel);
+        
+        // Centraliza a janela na tela
+        setLocationRelativeTo(null);
 
         setVisible(true);
     }
