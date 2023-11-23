@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Authentication {
+    public static User usuarioAtual;
+
     public static boolean authenticateUser(String email, String password) {
         try (Connection connection = DatabaseConnector.connect()) {
             String query = "SELECT * FROM users WHERE email = ? AND password = ?";
@@ -14,7 +16,8 @@ public class Authentication {
                 preparedStatement.setString(2, password);
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    return resultSet.next(); // Retorna true se houver um resultado (usuário autenticado)
+                    usuarioAtual = new User(resultSet);
+                    return resultSet.next();
                 }
             }
         } catch (SQLException e) {

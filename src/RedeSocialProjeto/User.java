@@ -2,9 +2,11 @@ package RedeSocialProjeto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class User {
+    private String id;
     private String name;
     private String email;
     private String password;
@@ -16,13 +18,20 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
     
-    public User(String name2, String email2, String password2, String phoneNumber2) {
+	public User(String name2, String email2, String password2, String phoneNumber2) {
 		this.name = name2;
 		this.email = email2;
 		this.password = password2;
 		this.phoneNumber = phoneNumber2;
 	}
 
+	public User(ResultSet resultSet) throws SQLException {
+		this.id = resultSet.getString("id");
+		this.name = resultSet.getString("name");
+		this.email = resultSet.getString("email");
+		this.password = resultSet.getString("password");
+		this.phoneNumber = resultSet.getString("phoneNumber");
+	}
 
 	// Método para salvar o usuário no banco de dados
     public void saveToDatabase() {
@@ -41,6 +50,10 @@ public class User {
         }
     }
 
+
+	public String getId() {
+		return id;
+	}
 
 	public String getName() {
 		return name;

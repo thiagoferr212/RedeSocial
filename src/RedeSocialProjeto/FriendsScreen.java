@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FriendsScreen extends JFrame {
-    private List<String> allUsers; // Lista fictícia de todos os usuários cadastrados
-    private List<String> friendsList; // Lista de amigos do usuário atual
+    private List<User> allUsers; // Lista fictícia de todos os usuários cadastrados
+    private List<User> friendsList; // Lista de amigos do usuário atual
 
     public FriendsScreen() {
         setTitle("Amigos");
@@ -28,15 +28,16 @@ public class FriendsScreen extends JFrame {
         setVisible(true);
     }
 
-    private List<String> getAllUsers() {
+    private List<User> getAllUsers() {
         // Simulação: obter todos os usuários do banco de dados
-        List<String> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         try (Connection connection = DatabaseConnector.connect()) {
-            String query = "SELECT name FROM users";
+            String query = "SELECT * FROM users WHERE name != ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setString(1, Authentication.usuarioAtual.getName());
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
-                        users.add(resultSet.getString("name"));
+                        users.add(new User(resultSet));
                     }
                 }
             }
@@ -46,19 +47,19 @@ public class FriendsScreen extends JFrame {
         return users;
     }
 
-    private List<String> getFriendsList() {
+    private List<User> getFriendsList() {
         // Simulação: obter amigos do usuário atual do banco de dados
-        List<String> friends = new ArrayList<>();
+        List<User> friends = new ArrayList<>();
         try (Connection connection = DatabaseConnector.connect()) {
-            int userId = getUserId(); // Replace with a real function to get the user ID
-            String query = "SELECT u.name FROM friends f " +
+            String userId = getUserId(); // Replace with a real function to get the user ID
+            String query = "SELECT u.id, u.name FROM friends f " +
                            "JOIN users u ON f.friend_id = u.id " +
                            "WHERE f.user_id = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, userId);
+                preparedStatement.setString(1, userId);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
-                        friends.add(resultSet.getString("name"));
+                        friends.add(new User(resultSet));
                     }
                 }
             }
@@ -116,10 +117,10 @@ public class FriendsScreen extends JFrame {
         );
 
         if (selectedUser != null && !friendsList.contains(selectedUser)) {
-            friendsList.add(selectedUser);
+            friendsList.add(new User());
             updateFriendsList(selectedUser, true); // Inclui amigo no banco de dados
             JOptionPane.showMessageDialog(null, selectedUser + " foi adicionado como amigo.");
-        } else if (friendsList.contains(selectedUser)) {
+        } else if (friendsList.contains(new User())) {
             JOptionPane.showMessageDialog(null, selectedUser + " já é seu amigo.");
         }
     }
@@ -127,7 +128,7 @@ public class FriendsScreen extends JFrame {
     private void updateFriendsList(String friendName, boolean addFriend) {
         // Atualiza a lista de amigos no banco de dados
         try (Connection connection = DatabaseConnector.connect()) {
-            int userId = getUserId(); // Substitua por uma função real que obtenha o ID do usuário atual
+            String userId = getUserId();
             String query;
 
             if (addFriend) {
@@ -139,8 +140,10 @@ public class FriendsScreen extends JFrame {
             }
 
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, userId);
-                preparedStatement.setString(2, friendName);
+                // Simulação: Supondo que você tenha uma tabela 'friends' com colunas 'user_id' e 'friend_name'
+                preparedStatement.setString(1, userId);
+                String selectedUser = null;
+				preparedStatement.setString(2, selectedUser);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -148,37 +151,41 @@ public class FriendsScreen extends JFrame {
         }
     }
 
+    private String getUserId() {
+		return Authentication.usuarioAtual.getId();
+	}
+
     private void consultFriends() {
         // Obtém a lista de amigos do banco de dados
-        List<String> friendsFromDatabase = getFriendsFromDatabase();
-
+        List<User> friendsFromDatabase = getFriendsFromDatabase();
+        
         if (friendsFromDatabase.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Você não tem amigos.");
         } else {
             // Exibe a lista de amigos
             StringBuilder message = new StringBuilder("Seus amigos:\n");
-            for (String friend : friendsFromDatabase) {
-                message.append("- ").append(friend).append("\n");
+            for (User friend : friendsFromDatabase) {
+                message.append("- ").append(friend.getName()).append("\n");
             }
             JOptionPane.showMessageDialog(null, message.toString());
         }
     }
 
-    private List<String> getFriendsFromDatabase() {
-        List<String> friends = new ArrayList<>();
-
+    private List<User> getFriendsFromDatabase() {
+        List<User> friends = new ArrayList<>();
+        
         try (Connection connection = DatabaseConnector.connect()) {
-            int userId = getUserId(); // Replace with a real function to get the user ID
-            String query = "SELECT u.name FROM friends f " +
-                           "JOIN users u ON f.friend_id = u.id " +
-                           "WHERE f.user_id = ?";
-
+            // Simulação: Supondo que você tenha uma tabela 'users' com colunas 'id' e 'name', 
+            // e uma tabela 'friends' com colunas 'user_id' e 'friend_id' (ou 'friend_name')
+            String query = "SELECT u.Id, u.name FROM users u INNER JOIN friends f ON u.id = f.friend_id WHERE f.user_id = ?";
+            
+            String userId = getUserId();
+            
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, userId);
-
+                preparedStatement.setString(1, userId);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
-                        friends.add(resultSet.getString("name"));
+                        friends.add(new User(resultSet));
                     }
                 }
             }
@@ -188,11 +195,6 @@ public class FriendsScreen extends JFrame {
 
         return friends;
     }
-
-    private int getUserId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	private void excludeFriend() {
         // Simulação: exibir a lista de amigos e permitir a exclusão de amigos
