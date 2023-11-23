@@ -17,17 +17,17 @@ public class DatabaseConnector {
         try (Connection connection = DatabaseConnector.connect()) {
             String commandMessages = "DROP TABLE IF EXISTS messages CASCADE ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(commandMessages)) {
-                preparedStatement.executeQuery();
+                preparedStatement.executeUpdate();
             }
             
             String commandFriends = "DROP TABLE IF EXISTS friends CASCADE ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(commandFriends)) {
-                preparedStatement.executeQuery();
+                preparedStatement.executeUpdate();
             }
             
             String commandUsers = "DROP TABLE IF EXISTS users CASCADE ";
             try (PreparedStatement preparedStatement = connection.prepareStatement(commandUsers)) {
-                preparedStatement.executeQuery();
+                preparedStatement.executeUpdate();
             }
             String createUsers = "CREATE TABLE users (\n" +
                     "    id SERIAL PRIMARY KEY,\n" +
@@ -37,7 +37,7 @@ public class DatabaseConnector {
                     "    phone_number VARCHAR(20)\n" +
                     ");";
             try (PreparedStatement preparedStatement = connection.prepareStatement(createUsers)) {
-                preparedStatement.executeQuery();
+                preparedStatement.executeUpdate();
             }
             String createFriends = "CREATE TABLE friends (\n" +
                     "    id SERIAL PRIMARY KEY,\n" +
@@ -45,7 +45,7 @@ public class DatabaseConnector {
                     "    id_amigo int NOT NULL\n" +
                     ");";
             try (PreparedStatement preparedStatement = connection.prepareStatement(createFriends)) {
-                preparedStatement.executeQuery();
+                preparedStatement.executeUpdate();
             }
             String createMessages = "CREATE TABLE messages (\n" +
                     "    id SERIAL PRIMARY KEY,\n" +
@@ -53,7 +53,7 @@ public class DatabaseConnector {
                     "    message VARCHAR(255)\n" +
                     ");";
             try (PreparedStatement preparedStatement = connection.prepareStatement(createMessages)) {
-                preparedStatement.executeQuery();
+                preparedStatement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -31,4 +31,14 @@ public class Friend {
 						e.printStackTrace();
 				}
 		}
+
+		public String getFriendName() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public void setFriendName(String string) {
+			// TODO Auto-generated method stub
+			
+		}
 }
