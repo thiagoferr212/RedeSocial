@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class User {
+		public boolean isResultSet;
     private String id;
     private String name;
     private String email;
@@ -27,6 +28,7 @@ public class User {
 
 	public User(ResultSet resultSet) throws SQLException {
 		while (resultSet.next()) {
+			this.isResultSet = true;
 			this.id = String.valueOf(resultSet.getString("id"));
 			this.name = resultSet.getString("name");
 			this.email = resultSet.getString("email");
