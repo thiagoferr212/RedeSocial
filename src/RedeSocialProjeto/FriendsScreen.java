@@ -67,7 +67,12 @@ public class FriendsScreen extends JFrame {
                 preparedStatement.setInt(1, userId);
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
-                        friends.add(new User(resultSet));
+                        int id = resultSet.getInt("id");
+                        String name = resultSet.getString("name");
+                        String email = resultSet.getString("email");
+                        String password = resultSet.getString("password");
+                        String phoneNumber = resultSet.getString("phone_number");
+                        friends.add(new User(id, name, email, password, phoneNumber));
                     }
                 }
             }
@@ -197,7 +202,12 @@ public class FriendsScreen extends JFrame {
                 preparedStatement.setInt(1, getUserId());
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
-                        friends.add(new User(resultSet));
+                        int id = resultSet.getInt("id");
+                        String name = resultSet.getString("name");
+                        String email = resultSet.getString("email");
+                        String password = resultSet.getString("password");
+                        String phoneNumber = resultSet.getString("phone_number");
+                        friends.add(new User(id, name, email, password, phoneNumber));
                     }
                 }
             }
