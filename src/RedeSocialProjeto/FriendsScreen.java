@@ -180,7 +180,7 @@ public class FriendsScreen extends JFrame {
         List<User> friends = new ArrayList<>();
         
         try (Connection connection = DatabaseConnector.connect()) {
-            String query = "SELECT * FROM users u INNER JOIN friends f ON u.id = f.id_amigo WHERE f.user_id = ?";
+            String query = "SELECT u.* FROM users u INNER JOIN friends f ON u.id = f.id_amigo WHERE f.user_id = ?";
             
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.setInt(1, getUserId());
