@@ -17,7 +17,7 @@ public class ChatScreen extends JFrame {
     private JTextField messageField;
     private JComboBox<String> friendComboBox;
 
-    private List<Friend> friendsList;  // Lista de objetos amigos
+    private List<User> friendsList;  // Lista de objetos Friend
 
     public ChatScreen() {
         setTitle("Chat");
@@ -32,29 +32,22 @@ public class ChatScreen extends JFrame {
         
         // Centraliza a janela na tela
         setLocationRelativeTo(null);
-
         setVisible(true);
     }
 
-    private List<Friend> getFriendsFromDatabase() {
-        List<Friend> friends = new ArrayList<>();
+    private List<User> getFriendsFromDatabase() {
+        List<User> friends = new ArrayList<>();
 
         try (Connection connection = DatabaseConnector.connect()) {
             // Consulta SQL para obter a lista de amigos do banco de dados
             String query = "SELECT f.id_amigo FROM friends f WHERE f.user_id = ?";
             
-            // Supondo que você tenha uma função real que obtenha o ID do usuário atual
-            int userId = getUserId();
-
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setInt(1, userId);
+                preparedStatement.setInt(1, getUserId());
 
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
-                        // Cria um objeto Friend para cada amigo
-                        Friend friend = new Friend();
-                        friend.setFriendName(resultSet.getString("friend_name"));
-                        friends.add(friend);
+                        friends.add(new User(resultSet));
                     }
                 }
             }
@@ -66,8 +59,7 @@ public class ChatScreen extends JFrame {
     }
 
     private int getUserId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Authentication.usuarioAtual.getId();
 	}
 
 	private void placeComponents(JPanel panel) {
@@ -80,8 +72,8 @@ public class ChatScreen extends JFrame {
         panel.add(scrollPane);
 
         friendComboBox = new JComboBox<>();
-        for (Friend friend : friendsList) {
-            friendComboBox.addItem(friend.getFriendName());
+        for (User friend : friendsList) {
+            friendComboBox.addItem(friend.getName());
         }
         friendComboBox.setBounds(10, 170, 150, 25);
         panel.add(friendComboBox);

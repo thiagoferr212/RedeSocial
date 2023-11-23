@@ -5,25 +5,23 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Friend {
-    private String id;
-    private String idUser;
-    private String idFriend;
+    private int id;
+    private int idUser;
+    private int idFriend;
 
 		public Friend() {}
 		
-		public Friend(String idUser, String idFriend) {
+		public Friend(int idUser, int idFriend) {
 				this.idUser = idUser;
 				this.idFriend = idFriend;
 		}
 
 		public void saveToDatabase() {
 				try (Connection connection = DatabaseConnector.connect()) {
-						String query = "INSERT INTO friends (user_id, friend_id) VALUES (?, ?), (?, ?);";
+						String query = "INSERT INTO friends (user_id, friend_id) VALUES (?, ?);";
 						try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-								preparedStatement.setString(1, idUser);
-								preparedStatement.setString(2, idFriend);
-								preparedStatement.setString(3, idFriend);
-								preparedStatement.setString(4, idUser);
+								preparedStatement.setInt(1, idUser);
+								preparedStatement.setInt(2, idFriend);
 
 								preparedStatement.executeUpdate();
 						}
@@ -34,28 +32,15 @@ public class Friend {
 
 		public void deleteToDatabase() {
 			try (Connection connection = DatabaseConnector.connect()) {
-					String query = "DELETE FROM friends " +
-					"WHERE user_id = ? AND id_amigo = (SELECT id FROM users WHERE name = ?)";
+					String query = "DELETE FROM friends WHERE user_id = ? AND id_amigo = ?";
 				try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-					preparedStatement.setString(1, idUser);
-					preparedStatement.setString(2, idFriend);
-					preparedStatement.setString(3, idFriend);
-					preparedStatement.setString(4, idUser);
+					preparedStatement.setInt(1, idUser);
+					preparedStatement.setInt(2, idFriend);
 					preparedStatement.executeUpdate();
 				} 
 			} catch (SQLException e) {
 					e.printStackTrace();
 			}
-		}
-
-		public String getFriendName() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public void setFriendName(String string) {
-			// TODO Auto-generated method stub
-			
 		}
 }

@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class User {
 		public boolean isResultSet;
-    private String id;
+    private int id;
     private String name;
     private String email;
     private String password;
@@ -29,7 +29,7 @@ public class User {
 	public User(ResultSet resultSet) throws SQLException {
 		while (resultSet.next()) {
 			this.isResultSet = true;
-			this.id = String.valueOf(resultSet.getString("id"));
+			this.id = resultSet.getInt("id");
 			this.name = resultSet.getString("name");
 			this.email = resultSet.getString("email");
 			this.password = resultSet.getString("password");
@@ -55,7 +55,7 @@ public class User {
     }
 
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 

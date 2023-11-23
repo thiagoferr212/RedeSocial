@@ -54,7 +54,7 @@ public class FriendsScreen extends JFrame {
         // Simulação: obter amigos do usuário atual do banco de dados
         List<User> friends = new ArrayList<>();
         try (Connection connection = DatabaseConnector.connect()) {
-            int userId = Integer.valueOf(getUserId()); // Replace with a real function to get the user ID
+            int userId = getUserId(); // Replace with a real function to get the user ID
             String query = "SELECT u.id, u.name FROM friends f " +
                            "JOIN users u ON f.id_amigo = u.id " +
                            "WHERE f.user_id = ?";
@@ -143,10 +143,7 @@ public class FriendsScreen extends JFrame {
     private void updateFriendsList(User userFriend, boolean addFriend) {
         // Atualiza a lista de amigos no banco de dados
         try (Connection connection = DatabaseConnector.connect()) {
-            String userId = getUserId();
-            String query;
-
-            Friend amigo = new Friend(userId, userFriend.getId());
+            Friend amigo = new Friend(getUserId(), userFriend.getId());
 
             if (addFriend) {
                 amigo.saveToDatabase();
@@ -159,7 +156,7 @@ public class FriendsScreen extends JFrame {
         }
     }
 
-    private String getUserId() {
+    private int getUserId() {
 		return Authentication.usuarioAtual.getId();
 	}
 
@@ -183,14 +180,10 @@ public class FriendsScreen extends JFrame {
         List<User> friends = new ArrayList<>();
         
         try (Connection connection = DatabaseConnector.connect()) {
-            // Simulação: Supondo que você tenha uma tabela 'users' com colunas 'id' e 'name', 
-            // e uma tabela 'friends' com colunas 'user_id' e 'id_amigo' (ou 'friend_name')
-            String query = "SELECT u.Id, u.name FROM users u INNER JOIN friends f ON u.id = f.id_amigo WHERE f.user_id = ?";
-            
-            String userId = getUserId();
+            String query = "SELECT * FROM users u INNER JOIN friends f ON u.id = f.id_amigo WHERE f.user_id = ?";
             
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, userId);
+                preparedStatement.setInt(1, getUserId());
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     while (resultSet.next()) {
                         friends.add(new User(resultSet));
@@ -206,12 +199,18 @@ public class FriendsScreen extends JFrame {
 
 	private void excludeFriend() {
         // Simulação: exibir a lista de amigos e permitir a exclusão de amigos
+
         if (friendsList.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Você não tem amigos para excluir.");
             return;
         }
 
-        String[] friendsArray = friendsList.toArray(new String[0]);
+        int i = 0;
+        String[] friendsArray = new String[friendsList.size()];
+        for (User user : friendsList) {
+            friendsArray[i] = user.getName();
+        }
+
         String selectedFriend = (String) JOptionPane.showInputDialog(
                 null,
                 "Escolha um amigo para excluir:",
@@ -222,9 +221,16 @@ public class FriendsScreen extends JFrame {
                 friendsArray[0]
         );
 
+        User userFriend = new User();
+        for (User user : friendsList) {
+            if (user.getName() == selectedFriend) {
+                userFriend = user;            
+            }
+        }
+
         if (selectedFriend != null) {
-            friendsList.remove(selectedFriend);
-            updateFriendsList(selectedFriend, false); // Atualiza a lista de amigos no banco de dados
+            friendsList.remove(userFriend);
+            updateFriendsList(userFriend, false); // Atualiza a lista de amigos no banco de dados
             JOptionPane.showMessageDialog(null, selectedFriend + " foi removido da sua lista de amigos.");
         }
     }
