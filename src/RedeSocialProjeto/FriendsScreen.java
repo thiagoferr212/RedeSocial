@@ -107,6 +107,12 @@ public class FriendsScreen extends JFrame {
     }
 
     private void includeFriend() {
+
+        if (allUsers.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Não existe usuários para adicionar.");
+            return;
+        }
+
         // Simulação: exibir uma lista de usuários e permitir a inclusão de amigos
         int i = 0;
         String[] usersArray = new String[allUsers.size()];
