@@ -17,7 +17,7 @@ public class DatabaseConnector {
     public static void InicializeDB() {
         try (Connection connection = DatabaseConnector.connect()) {
             // Mantenha apenas a criação das tabelas
-            String createUsers = "CREATE TABLE IF NOT EXISTS users (\n" +
+            /*String createUsers = "CREATE TABLE IF NOT EXISTS users (\n" +
                     "    id SERIAL PRIMARY KEY,\n" +
                     "    name VARCHAR(255) NOT NULL,\n" +
                     "    email VARCHAR(255) NOT NULL UNIQUE,\n" +
@@ -39,7 +39,7 @@ public class DatabaseConnector {
                     "    id SERIAL PRIMARY KEY,\n" +
                     "    friend_id int NOT NULL,\n" +
                     "    message VARCHAR(255)\n" +
-                    ");";
+                    ");";*/
             try (PreparedStatement preparedStatement = connection.prepareStatement(createMessages)) {
                 preparedStatement.executeUpdate();
             }
