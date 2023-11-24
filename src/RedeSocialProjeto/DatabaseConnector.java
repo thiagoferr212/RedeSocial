@@ -1,4 +1,5 @@
 package RedeSocialProjeto;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,23 +14,10 @@ public class DatabaseConnector {
         return DriverManager.getConnection(DB_URL, USER, PASSWORD);
     }
 
-    public static void InicializeDB(){
+    public static void InicializeDB() {
         try (Connection connection = DatabaseConnector.connect()) {
-            String commandMessages = "DROP TABLE IF EXISTS messages CASCADE ";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(commandMessages)) {
-                preparedStatement.executeUpdate();
-            }
-            
-            String commandFriends = "DROP TABLE IF EXISTS friends CASCADE ";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(commandFriends)) {
-                preparedStatement.executeUpdate();
-            }
-            
-            String commandUsers = "DROP TABLE IF EXISTS users CASCADE ";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(commandUsers)) {
-                preparedStatement.executeUpdate();
-            }
-            String createUsers = "CREATE TABLE users (\n" +
+            // Mantenha apenas a criação das tabelas
+            String createUsers = "CREATE TABLE IF NOT EXISTS users (\n" +
                     "    id SERIAL PRIMARY KEY,\n" +
                     "    name VARCHAR(255) NOT NULL,\n" +
                     "    email VARCHAR(255) NOT NULL UNIQUE,\n" +
@@ -39,7 +27,7 @@ public class DatabaseConnector {
             try (PreparedStatement preparedStatement = connection.prepareStatement(createUsers)) {
                 preparedStatement.executeUpdate();
             }
-            String createFriends = "CREATE TABLE friends (\n" +
+            String createFriends = "CREATE TABLE IF NOT EXISTS friends (\n" +
                     "    id SERIAL PRIMARY KEY,\n" +
                     "    user_id int NOT NULL,\n" +
                     "    id_amigo int NOT NULL\n" +
@@ -47,7 +35,7 @@ public class DatabaseConnector {
             try (PreparedStatement preparedStatement = connection.prepareStatement(createFriends)) {
                 preparedStatement.executeUpdate();
             }
-            String createMessages = "CREATE TABLE messages (\n" +
+            String createMessages = "CREATE TABLE IF NOT EXISTS messages (\n" +
                     "    id SERIAL PRIMARY KEY,\n" +
                     "    friend_id int NOT NULL,\n" +
                     "    message VARCHAR(255)\n" +
